@@ -10,9 +10,9 @@ import { Navbar } from '@/templates/Navbar';
 import { Pricing } from '@/templates/Pricing';
 import { Sponsors } from '@/templates/Sponsors';
 
-export async function generateMetadata(props: { params: { locale: string } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: string }> }) {
   const t = await getTranslations({
-    locale: props.params.locale,
+    locale: (await props.params).locale,
     namespace: 'Index',
   });
 
@@ -22,8 +22,8 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const IndexPage = (props: { params: { locale: string } }) => {
-  unstable_setRequestLocale(props.params.locale);
+const IndexPage = async (props: { params: Promise<{ locale: string }> }) => {
+  unstable_setRequestLocale((await props.params).locale);
 
   return (
     <>
