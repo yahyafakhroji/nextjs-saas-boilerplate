@@ -1,8 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/utils/Helpers"
+  },
   "rsc": true,
-  "tsx": true,
+  "style": "default",
   "tailwind": {
     "config": "tailwind.config.ts",
     "css": "src/styles/global.css",
@@ -10,8 +13,5 @@
     "cssVariables": true,
     "prefix": ""
   },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/utils/Helpers"
-  }
+  "tsx": true
 }
