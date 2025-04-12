@@ -1,64 +1,59 @@
-import '@/styles/global.css';
+import "@/styles/global.css";
 
-import type { Metadata } from 'next';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
 
-import { AllLocales } from '@/utils/AppConfig';
+import { routing } from "@/i18n/routing";
+import { AllLocales } from "@/utils/AppConfig";
 
 export const metadata: Metadata = {
   icons: [
     {
-      rel: 'apple-touch-icon',
-      url: '/apple-touch-icon.png',
+      rel: "apple-touch-icon",
+      url: "/apple-touch-icon.png",
     },
     {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '32x32',
-      url: '/favicon-32x32.png',
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      url: "/favicon-32x32.png",
     },
     {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '16x16',
-      url: '/favicon-16x16.png',
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      url: "/favicon-16x16.png",
     },
     {
-      rel: 'icon',
-      url: '/favicon.ico',
+      rel: "icon",
+      url: "/favicon.ico",
     },
   ],
 };
 
 export function generateStaticParams() {
-  return AllLocales.map(locale => ({ locale }));
+  return AllLocales.map((locale) => ({ locale }));
 }
 
-export default function RootLayout(props: {
+export default async function RootLayout({
+  children,
+  params,
+}: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  unstable_setRequestLocale(props.params.locale);
+  // Ensure that the incoming `locale` is valid
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
 
-  // Using internationalization in Client Components
-  const messages = useMessages();
-
-  // The `suppressHydrationWarning` in <html> is used to prevent hydration errors caused by `next-themes`.
-  // Solution provided by the package itself: https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
-
-  // The `suppressHydrationWarning` attribute in <body> is used to prevent hydration errors caused by Sentry Overlay,
-  // which dynamically adds a `style` attribute to the body tag.
   return (
-    <html lang={props.params.locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
         {/* PRO: Dark mode support for Shadcn UI */}
-        <NextIntlClientProvider
-          locale={props.params.locale}
-          messages={messages}
-        >
-          {props.children}
-        </NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale}>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

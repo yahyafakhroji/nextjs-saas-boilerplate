@@ -1,16 +1,12 @@
-import { auth } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
-export default function CenteredLayout(props: { children: React.ReactNode }) {
-  const { userId } = auth();
+export default async function CenteredLayout({ children }: { children: React.ReactNode }) {
+  const { userId } = await auth();
 
   if (userId) {
-    redirect('/dashboard');
+    redirect("/dashboard");
   }
 
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      {props.children}
-    </div>
-  );
+  return <div className="flex min-h-screen items-center justify-center">{children}</div>;
 }

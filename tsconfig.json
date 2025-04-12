@@ -53,18 +53,6 @@
       }
     ]
   },
-  "exclude": [
-    "./out/**/*",
-    "./node_modules/**/*",
-    "**/*.spec.ts",
-    "**/*.e2e.ts"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".storybook/*.ts",
-    ".next/types/**/*.ts",
-    "**/*.mts"
-  ]
+  "exclude": ["./out/**/*", "./node_modules/**/*", "**/*.spec.ts", "**/*.e2e.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/*.ts", ".next/types/**/*.ts", "**/*.mts"]
 }
