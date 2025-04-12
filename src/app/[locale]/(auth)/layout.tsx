@@ -1,30 +1,34 @@
-'use client';
+"use client";
 
-import { enUS, frFR } from '@clerk/localizations';
-import { ClerkProvider } from '@clerk/nextjs';
+import { use } from "react";
+import { enUS, frFR } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
 
-import { AppConfig } from '@/utils/AppConfig';
-import { Env } from '@/libs/Env';
+import { AppConfig } from "@/utils/AppConfig";
 
-export default function AuthLayout(props: {
+export default function AuthLayout({
+  children,
+  params,
+}: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = use(params);
   let clerkLocale = enUS;
-  let signInUrl = '/sign-in';
-  let signUpUrl = '/sign-up';
-  let dashboardUrl = '/dashboard';
-  let afterSignOutUrl = '/';
+  let signInUrl = "/sign-in";
+  let signUpUrl = "/sign-up";
+  let dashboardUrl = "/dashboard";
+  let afterSignOutUrl = "/";
 
-  if (props.params.locale === 'fr') {
+  if (locale === "fr") {
     clerkLocale = frFR;
   }
 
-  if (props.params.locale !== AppConfig.defaultLocale) {
-    signInUrl = `/${props.params.locale}${signInUrl}`;
-    signUpUrl = `/${props.params.locale}${signUpUrl}`;
-    dashboardUrl = `/${props.params.locale}${dashboardUrl}`;
-    afterSignOutUrl = `/${props.params.locale}${afterSignOutUrl}`;
+  if (locale !== AppConfig.defaultLocale) {
+    signInUrl = `/${locale}${signInUrl}`;
+    signUpUrl = `/${locale}${signUpUrl}`;
+    dashboardUrl = `/${locale}${dashboardUrl}`;
+    afterSignOutUrl = `/${locale}${afterSignOutUrl}`;
   }
 
   return (
@@ -37,7 +41,7 @@ export default function AuthLayout(props: {
       signUpFallbackRedirectUrl={dashboardUrl}
       afterSignOutUrl={afterSignOutUrl}
     >
-      {props.children}
+      {children}
     </ClerkProvider>
   );
 }

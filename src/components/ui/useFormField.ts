@@ -1,5 +1,6 @@
-import React from 'react';
-import { type FieldPath, type FieldValues, useFormContext } from 'react-hook-form';
+import React from "react";
+import type { FieldPath, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -8,27 +9,23 @@ type FormFieldContextValue<
   name: TName;
 };
 
-export const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
-);
+export const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 type FormItemContextValue = {
   id: string;
 };
 
-export const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
-);
+export const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue);
 
 export const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext);
-  const itemContext = React.useContext(FormItemContext);
+  const fieldContext = React.use(FormFieldContext);
+  const itemContext = React.use(FormItemContext);
   const { getFieldState, formState } = useFormContext();
 
   const fieldState = getFieldState(fieldContext.name, formState);
 
   if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>');
+    throw new Error("useFormField should be used within <FormField>");
   }
 
   const { id } = itemContext;
